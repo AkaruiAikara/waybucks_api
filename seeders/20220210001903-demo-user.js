@@ -1,5 +1,10 @@
 'use strict';
 
+// import faker
+const { faker } = require('@faker-js/faker');
+// set locale to id_ID
+faker.locale = 'id_ID';
+
 module.exports = {
   async up (queryInterface, Sequelize) {
     /**
@@ -11,13 +16,17 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('Users', [{
-      fullName: 'Fallah Andy Prakasa',
-      email: 'fallaha@mail.com',
-      password: '12345678',
-      createdAt: new Date(),
-      updatedAt: new Date()
-    }])
+   // create loop to generate 100 users
+    for (let i = 0; i < 100; i++) {
+      // create user
+      await queryInterface.bulkInsert('users', [{
+        fullName: faker.name.findName(),
+        email: faker.internet.email(),
+        password: faker.internet.password(),
+        createdAt: new Date(),
+        updatedAt: new Date()
+      }], {});
+    }
   },
 
   async down (queryInterface, Sequelize) {
