@@ -7,10 +7,14 @@ exports.getUsers = (req, res) => {
         User.findAll({
             attributes: ['id', 'fullName', 'email', 'password']
         }).then(users => {
-            res.send(users);
+            res.send({
+                status: 'success',
+                data: {users}
+                });
         });
     } catch (error) {
         res.status(500).send({
+            status: 'error',
             message: error.message
         });
     }
@@ -24,14 +28,19 @@ exports.getUserById = (req, res) => {
         }).then(user => {
             if (!user) {
                 res.status(404).send({
+                    status: 'error',
                     message: 'User not found'
                 });
                 return;
             }
-            res.send(user);
+            res.send({
+                status: 'success',
+                data: {user}
+            });
         });
     } catch (error) {
         res.status(500).send({
+            status: 'error',
             message: error.message
         });
     }
@@ -45,10 +54,14 @@ exports.addUser = (req, res) => {
             email: req.body.email,
             password: req.body.password
         }).then(user => {
-            res.send(user);
+            res.send({
+                status: 'success',
+                data: {user}
+            });
         });
     } catch (error) {
         res.status(500).send({
+            status: 'error',
             message: error.message
         });
     }
@@ -66,10 +79,14 @@ exports.updateUser = (req, res) => {
                 id: req.params.id
             }
         }).then(user => {
-            res.send(user);
+            res.send({
+                status: 'success',
+                data: {user}
+            });
         });
     } catch (error) {
         res.status(500).send({
+            status: 'error',
             message: error.message
         });
     }
@@ -82,11 +99,22 @@ exports.deleteUser = (req, res) => {
             where: {
                 id: req.params.id
             }
-        }).then(user => {
-            res.send(user);
+        }).then((user) => {
+            if (user == 0) {
+                res.status(404).send({
+                    status: 'error',
+                    message: 'User not found'
+                });
+                return;
+            }
+            res.send({
+                status: 'success',
+                message: 'User deleted successfully'
+            });
         });
     } catch (error) {
         res.status(500).send({
+            status: 'error',
             message: error.message
         });
     }
