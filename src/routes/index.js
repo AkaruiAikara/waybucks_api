@@ -8,6 +8,8 @@ const router = express.Router()
 const { getUsers, getUserById, addUser, updateUser, deleteUser } = require('../controllers/user')
 // product
 const { getProducts, getProductById, addProduct, updateProduct, deleteProduct } = require('../controllers/product')
+// category
+const { getCategories, getCategoryById, addCategory, updateCategory, deleteCategory } = require('../controllers/category')
 
 // routes
 
@@ -23,5 +25,11 @@ router.get('/products/:id', getProductById)
 router.post('/products', addProduct)
 router.patch('/products/:id', updateProduct)
 router.delete('/products/:id', deleteProduct)
+// category
+router.get('/categories', getCategories)
+router.get('/categories/:id', getCategoryById)
+router.post('/categories', addCategory)
+router.patch('/categories/:id', updateCategory)
+router.delete('/categories/:id', deleteCategory)
 
 module.exports = router
