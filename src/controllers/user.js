@@ -5,7 +5,7 @@ const { User } = require('../../models');
 exports.getUsers = (req, res) => {
     try {
         User.findAll({
-            attributes: ['id', 'fullName', 'email', 'password']
+            attributes: ['id', 'fullName', 'email', 'password', 'image']
         }).then(users => {
             res.send({
                 status: 'success',
@@ -24,7 +24,7 @@ exports.getUsers = (req, res) => {
 exports.getUserById = (req, res) => {
     try {
         User.findByPk(req.params.id, {
-            attributes: ['id', 'fullName', 'email', 'password']
+            attributes: ['id', 'fullName', 'email', 'password', 'image']
         }).then(user => {
             if (!user) {
                 res.status(404).send({
@@ -109,7 +109,9 @@ exports.deleteUser = (req, res) => {
             }
             res.send({
                 status: 'success',
-                message: 'User deleted successfully'
+                data: {
+                    id: req.params.id
+                }
             });
         });
     } catch (error) {
