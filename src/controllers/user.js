@@ -1,10 +1,15 @@
 // import required models
-const { User } = require('../../models');
+const { User, Profile } = require('../../models');
 
 // get users
 exports.getUsers = (req, res) => {
     try {
         User.findAll({
+            include: {
+                model: Profile,
+                as: 'profile',
+                attributes: ['phone', 'gender', 'address']
+            },
             attributes: ['id', 'fullName', 'email', 'password', 'image']
         }).then(users => {
             res.send({
@@ -24,6 +29,11 @@ exports.getUsers = (req, res) => {
 exports.getUserById = (req, res) => {
     try {
         User.findByPk(req.params.id, {
+            include: {
+                model: Profile,
+                as: 'profile',
+                attributes: ['phone', 'gender', 'address']
+            },
             attributes: ['id', 'fullName', 'email', 'password', 'image']
         }).then(user => {
             if (!user) {

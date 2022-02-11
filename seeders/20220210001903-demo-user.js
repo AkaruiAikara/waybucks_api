@@ -1,5 +1,11 @@
 'use strict';
 
+// import bcrypt
+const bcrypt = require('bcrypt');
+// generate salt
+const salt = bcrypt.genSaltSync(10);
+// generate hash
+const hash = bcrypt.hashSync('123456', salt);
 // import faker
 const { faker } = require('@faker-js/faker');
 // set locale to id_ID
@@ -22,7 +28,7 @@ module.exports = {
       await queryInterface.bulkInsert('users', [{
         fullName: faker.name.findName(),
         email: faker.internet.email(),
-        password: faker.internet.password(),
+        password: hash,
         createdAt: new Date(),
         updatedAt: new Date()
       }], {});
