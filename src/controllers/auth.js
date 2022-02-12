@@ -4,6 +4,8 @@ const { User } = require('../../models');
 const Joi = require('joi');
 // import bcrypt
 const bcrypt = require('bcrypt');
+// import jwt
+const jwt = require('jsonwebtoken');
 
 // Register user
 exports.register = async (req, res) => {
@@ -45,10 +47,18 @@ exports.register = async (req, res) => {
             email: req.body.email,
             password: hashedPassword
         });
+        // generate token
+        const token = jwt.sign({
+            id: newUser.id,
+            email: newUser.email
+        }, process.env.JWT_SECRET, {
+            expiresIn: '24h'
+        });
         res.send({
             status: 'success',
             data: {
-                user: newUser
+                user: newUser,
+                token
             }
         });
     } catch (error) {
@@ -97,11 +107,19 @@ exports.login = async (req, res) => {
             });
             return;
         }
+        // generate token
+        const token = jwt.sign({
+            id: user.id,
+            email: user.email
+        }, process.env.JWT_SECRET, {
+            expiresIn: '24h'
+        });
         res.send({
             status: 'success',
             data: {
                 fullName: user.fullName,
-                email: user.email
+                email: user.email,
+                token
             }
         });
     } catch (error) {
