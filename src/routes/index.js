@@ -8,8 +8,6 @@ const router = express.Router()
 const { getUsers, getUserById, addUser, updateUser, deleteUser } = require('../controllers/user')
 // product
 const { getProducts, getProductById, addProduct, updateProduct, deleteProduct } = require('../controllers/product')
-// category
-const { getCategories, getCategoryById, addCategory, updateCategory, deleteCategory } = require('../controllers/category')
 // transaction
 const { getTransactions, getTransactionsByUserId, getTransactionById, addTransaction, updateTransaction, deleteTransaction } = require('../controllers/transaction')
 
@@ -27,12 +25,6 @@ router.get('/products/:id', getProductById)
 router.post('/products', addProduct)
 router.patch('/products/:id', updateProduct)
 router.delete('/products/:id', deleteProduct)
-// category
-router.get('/categories', getCategories)
-router.get('/categories/:id', getCategoryById)
-router.post('/categories', addCategory)
-router.patch('/categories/:id', updateCategory)
-router.delete('/categories/:id', deleteCategory)
 // transaction
 router.get('/transactions', getTransactions)
 router.get('/transactions/user/:userId', getTransactionsByUserId)

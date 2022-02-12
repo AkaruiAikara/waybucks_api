@@ -1,5 +1,5 @@
 // import required models
-const { Product, User, Category, ProductCategory } = require('../../models');
+const { Product, User } = require('../../models');
 
 // get all products
 exports.getProducts = (req, res) => {
@@ -10,16 +10,6 @@ exports.getProducts = (req, res) => {
                     model: User,
                     as: 'user',
                     attributes: ['id', 'fullName', 'email', 'password', 'image']
-                },
-                {
-                    model: Category,
-                    as: 'categories',
-                    through: {
-                        model: ProductCategory,
-                        as: 'product_categories',
-                        attributes: []
-                    },
-                    attributes: ['id', 'name']
                 }
             ],
             attributes: ['id', 'title', 'desc', 'price', 'image', 'qty']
@@ -46,16 +36,6 @@ exports.getProductById = (req, res) => {
                     model: User,
                     as: 'user',
                     attributes: ['id', 'fullName', 'email', 'password', 'image']
-                },
-                {
-                    model: Category,
-                    as: 'categories',
-                    through: {
-                        model: ProductCategory,
-                        as: 'product_categories',
-                        attributes: []
-                    },
-                    attributes: ['id', 'name']
                 }
             ],
             attributes: ['id', 'title', 'desc', 'price', 'image', 'qty']
