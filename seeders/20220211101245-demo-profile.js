@@ -1,6 +1,8 @@
 'use strict';
 
 const { default: faker } = require("@faker-js/faker");
+// set locale to id_ID
+faker.locale = 'id_ID';
 
 module.exports = {
   async up (queryInterface, Sequelize) {
@@ -17,7 +19,7 @@ module.exports = {
     for (let i = 0; i < 100; i++) {
       // create profile
       await queryInterface.bulkInsert('profiles', [{
-        user_id: i + 1,
+        userId: i + 1,
         phone: faker.phone.phoneNumber(),
         gender: ['Laki-Laki', 'Perempuan'][Math.floor(Math.random() * 2)],
         address: faker.address.streetAddress()

@@ -7,7 +7,7 @@ const salt = bcrypt.genSaltSync(10);
 // generate hash
 const hash = bcrypt.hashSync('123456', salt);
 // import faker
-const { faker } = require('@faker-js/faker');
+const { default: faker } = require("@faker-js/faker");
 // set locale to id_ID
 faker.locale = 'id_ID';
 

@@ -15,8 +15,8 @@ module.exports = {
     for (let i = 0; i < 200; i++) {
       // create pivot product category
       await queryInterface.bulkInsert('productcategories', [{
-        product_id: Math.floor(Math.random() * 200) + 1,
-        category_id: Math.floor(Math.random() * 8) + 1
+        productId: Math.floor(Math.random() * 200) + 1,
+        categoryId: Math.floor(Math.random() * 8) + 1
       }], {});
     }
   },

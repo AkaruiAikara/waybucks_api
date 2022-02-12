@@ -84,7 +84,7 @@ exports.getProductById = (req, res) => {
 exports.addProduct = (req, res) => {
     try {
         Product.create({
-            user_id: req.body.user_id,
+            userId: req.body.userId,
             title: req.body.title,
             desc: req.body.desc,
             price: req.body.price,
@@ -108,7 +108,7 @@ exports.addProduct = (req, res) => {
 exports.updateProduct = (req, res) => {
     try {
         Product.update({
-            user_id: req.body.user_id,
+            userId: req.body.userId,
             title: req.body.title,
             desc: req.body.desc,
             price: req.body.price,

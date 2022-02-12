@@ -1,9 +1,5 @@
 'use strict';
 
-const { default: faker } = require("@faker-js/faker");
-// set locale to id_ID
-faker.locale = 'id_ID';
-
 module.exports = {
   async up (queryInterface, Sequelize) {
     /**
@@ -15,16 +11,15 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    // create loop to generate 200 products
-    for (let i = 0; i < 200; i++) {
-      // create product
-      await queryInterface.bulkInsert('products', [{
+    // create loop to generate 500 transactions
+    for (let i = 0; i < 500; i++) {
+      // create transaction
+      await queryInterface.bulkInsert('transactions', [{
+        productId: Math.floor(Math.random() * 200) + 1,
         userId: Math.floor(Math.random() * 100) + 1,
-        title: faker.commerce.productName(),
-        desc: faker.lorem.paragraph(),
-        price: Math.floor(Math.random() * 100000),
-        image: faker.image.image(),
-        qty: Math.floor(Math.random() * 100)
+        status: ['Pending', 'Success', 'Failed'][Math.floor(Math.random() * 3)],
+        createdAt: new Date(),
+        updatedAt: new Date()
       }], {});
     }
   },
@@ -36,6 +31,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('Products', null, {});
+    await queryInterface.bulkDelete('Transactions', null, {});
   }
 };
