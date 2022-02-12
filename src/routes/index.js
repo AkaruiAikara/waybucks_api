@@ -10,6 +10,8 @@ const { getUsers, getUserById, addUser, updateUser, deleteUser } = require('../c
 const { getProducts, getProductById, addProduct, updateProduct, deleteProduct } = require('../controllers/product')
 // transaction
 const { getTransactions, getTransactionsByUserId, getTransactionById, addTransaction, updateTransaction, deleteTransaction } = require('../controllers/transaction')
+// topping
+const { getToppings, getToppingById, addTopping, updateTopping, deleteTopping } = require('../controllers/topping')
 
 // Routes
 
@@ -32,5 +34,11 @@ router.get('/transactions/:id', getTransactionById)
 router.post('/transactions', addTransaction)
 router.patch('/transactions/:id', updateTransaction)
 router.delete('/transactions/:id', deleteTransaction)
+// topping
+router.get('/toppings', getToppings)
+router.get('/toppings/:id', getToppingById)
+router.post('/toppings', addTopping)
+router.patch('/toppings/:id', updateTopping)
+router.delete('/toppings/:id', deleteTopping)
 
 module.exports = router

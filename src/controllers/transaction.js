@@ -1,4 +1,4 @@
-const { Transaction, User, Order, Product } = require('../../models');
+const { Transaction, User, Order, Product, Topping, OrderTopping } = require('../../models');
 
 // get all transactions
 exports.getTransactions = (req, res) => {
@@ -14,11 +14,23 @@ exports.getTransactions = (req, res) => {
                     model: Order,
                     as: 'orders',
                     attributes: ['id', 'qty'],
-                    include: [{
-                        model: Product,
-                        as: 'product',
-                        attributes: ['id', 'title', 'price', 'image']
-                    }]
+                    include: [
+                        {
+                            model: Product,
+                            as: 'product',
+                            attributes: ['id', 'title', 'price', 'image']
+                        },
+                        {
+                            model: Topping,
+                            as: 'toppings',
+                            through: {
+                                model: OrderTopping,
+                                as: 'orderToppings',
+                                attributes: []
+                            },
+                            attributes: ['id', 'title', 'price']
+                        }
+                    ]
                 }
             ],
             attributes: ['id', 'status', 'createdAt']
@@ -50,11 +62,23 @@ exports.getTransactionsByUserId = (req, res) => {
                     model: Order,
                     as: 'orders',
                     attributes: ['id', 'qty'],
-                    include: {
-                        model: Product,
-                        as: 'product',
-                        attributes: ['id', 'title', 'price', 'image']
-                    }
+                    include: [
+                        {
+                            model: Product,
+                            as: 'product',
+                            attributes: ['id', 'title', 'price', 'image']
+                        },
+                        {
+                            model: Topping,
+                            as: 'toppings',
+                            through: {
+                                model: OrderTopping,
+                                as: 'orderToppings',
+                                attributes: []
+                            },
+                            attributes: ['id', 'title', 'price']
+                        }
+                    ]
                 }
             ],
             attributes: ['id', 'status', 'createdAt'],
