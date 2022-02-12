@@ -1,4 +1,4 @@
-const { Transaction, User } = require('../../models');
+const { Transaction, User, Order, Product } = require('../../models');
 
 // get all transactions
 exports.getTransactions = (req, res) => {
@@ -9,6 +9,16 @@ exports.getTransactions = (req, res) => {
                     model: User,
                     as: 'user',
                     attributes: ['id', 'fullName', 'email']
+                },
+                {
+                    model: Order,
+                    as: 'orders',
+                    attributes: ['id', 'qty'],
+                    include: [{
+                        model: Product,
+                        as: 'product',
+                        attributes: ['id', 'title', 'price', 'image']
+                    }]
                 }
             ],
             attributes: ['id', 'status', 'createdAt']
@@ -35,6 +45,16 @@ exports.getTransactionsByUserId = (req, res) => {
                     model: User,
                     as: 'user',
                     attributes: ['id', 'fullName', 'email']
+                },
+                {
+                    model: Order,
+                    as: 'orders',
+                    attributes: ['id', 'qty'],
+                    include: {
+                        model: Product,
+                        as: 'product',
+                        attributes: ['id', 'title', 'price', 'image']
+                    }
                 }
             ],
             attributes: ['id', 'status', 'createdAt'],
