@@ -2,6 +2,8 @@
 const { User } = require('../../models');
 // import joi
 const Joi = require('joi');
+// import bcrypt
+const bcrypt = require('bcrypt');
 
 // Register user
 exports.register = async (req, res) => {
@@ -12,7 +14,7 @@ exports.register = async (req, res) => {
             email: Joi.string().email().min(6).required(),
             password: Joi.string().min(8).required()
         });
-        const { error } = Joi.validate(req.body, schema);
+        const { error } = schema.validate(req.body);
         if (error) {
             res.status(400).send({
                 status: 'error',
@@ -33,11 +35,15 @@ exports.register = async (req, res) => {
             });
             return;
         }
+        // generate salt
+        const salt = await bcrypt.genSalt(10);
+        // hash password
+        const hashedPassword = await bcrypt.hash(req.body.password, salt);
         // create new user
         const newUser = await User.create({
             fullName: req.body.fullName,
             email: req.body.email,
-            password: req.body.password
+            password: hashedPassword
         });
         res.send({
             status: 'success',
@@ -48,7 +54,7 @@ exports.register = async (req, res) => {
     } catch (error) {
         res.status(500).send({
             status: 'error',
-            message: error.message
+            message: error
         });
     }
 };
@@ -61,7 +67,7 @@ exports.login = async (req, res) => {
             email: Joi.string().email().min(6).required(),
             password: Joi.string().min(8).required()
         });
-        const { error } = Joi.validate(req.body, schema);
+        const { error } = schema.validate(req.body);
         if (error) {
             res.status(400).send({
                 status: 'error',
@@ -83,13 +89,21 @@ exports.login = async (req, res) => {
             return;
         }
         // check if password is correct
-        if (user.password !== req.body.password) {
+        const validPassword = await bcrypt.compare(req.body.password, user.password);
+        if (!validPassword) {
             res.status(400).send({
                 status: 'error',
                 message: 'Email or password is incorrect'
             });
             return;
         }
+        res.send({
+            status: 'success',
+            data: {
+                fullName: user.fullName,
+                email: user.email
+            }
+        });
     } catch (error) {
         res.status(500).send({
             status: 'error',
