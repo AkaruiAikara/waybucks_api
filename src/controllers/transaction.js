@@ -1,15 +1,10 @@
-const { Transaction, Product, User } = require('../../models');
+const { Transaction, User } = require('../../models');
 
 // get all transactions
 exports.getTransactions = (req, res) => {
     try {
         Transaction.findAll({
             include: [
-                {
-                    model: Product,
-                    as: 'product',
-                    attributes: ['id', 'title', 'desc', 'price', 'image', 'qty']
-                },
                 {
                     model: User,
                     as: 'user',
@@ -37,11 +32,6 @@ exports.getTransactionsByUserId = (req, res) => {
         Transaction.findAll({
             include: [
                 {
-                    model: Product,
-                    as: 'product',
-                    attributes: ['id', 'title', 'desc', 'price', 'image', 'qty']
-                },
-                {
                     model: User,
                     as: 'user',
                     attributes: ['id', 'fullName', 'email']
@@ -52,7 +42,6 @@ exports.getTransactionsByUserId = (req, res) => {
                 userId: req.params.userId
             }
         }).then(transactions => {
-            console.log(transactions)
             if (transactions.length === 0) {
                 res.status(404).send({
                     status: 'error',
@@ -78,11 +67,6 @@ exports.getTransactionById = (req, res) => {
     try {
         Transaction.findByPk(req.params.id, {
             include: [
-                {
-                    model: Product,
-                    as: 'product',
-                    attributes: ['id', 'title', 'desc', 'price', 'image', 'qty']
-                },
                 {
                     model: User,
                     as: 'user',
@@ -116,7 +100,6 @@ exports.addTransaction = (req, res) => {
     try {
         Transaction.create({
             userId: req.body.userId,
-            productId: req.body.productId,
             status: req.body.status
         }).then(transaction => {
             res.send({

@@ -22,7 +22,9 @@ module.exports = {
         userId: i + 1,
         phone: faker.phone.phoneNumber(),
         gender: ['Laki-Laki', 'Perempuan'][Math.floor(Math.random() * 2)],
-        address: faker.address.streetAddress()
+        address: faker.address.streetAddress(),
+        createdAt: new Date(),
+        updatedAt: new Date()
       }], {});
     }
   },

@@ -1,18 +1,11 @@
 // import required models
-const { Product, User } = require('../../models');
+const { Product } = require('../../models');
 
 // get all products
 exports.getProducts = (req, res) => {
     try {
         Product.findAll({
-            include: [
-                {
-                    model: User,
-                    as: 'user',
-                    attributes: ['id', 'fullName', 'email', 'password', 'image']
-                }
-            ],
-            attributes: ['id', 'title', 'desc', 'price', 'image', 'qty']
+            attributes: ['id', 'title', 'price', 'image']
         }).then(products => {
             res.send({
                 status: 'success',
@@ -31,14 +24,7 @@ exports.getProducts = (req, res) => {
 exports.getProductById = (req, res) => {
     try {
         Product.findByPk(req.params.id, {
-            include: [
-                {
-                    model: User,
-                    as: 'user',
-                    attributes: ['id', 'fullName', 'email', 'password', 'image']
-                }
-            ],
-            attributes: ['id', 'title', 'desc', 'price', 'image', 'qty']
+            attributes: ['id', 'title', 'price', 'image']
         }).then(product => {
             if (!product) {
                 res.status(404).send({
@@ -64,12 +50,9 @@ exports.getProductById = (req, res) => {
 exports.addProduct = (req, res) => {
     try {
         Product.create({
-            userId: req.body.userId,
             title: req.body.title,
-            desc: req.body.desc,
             price: req.body.price,
-            image: req.body.image,
-            qty: req.body.qty
+            image: req.body.image
         }).then(product => {
             res.send({
                 status: 'success',
@@ -88,12 +71,9 @@ exports.addProduct = (req, res) => {
 exports.updateProduct = (req, res) => {
     try {
         Product.update({
-            userId: req.body.userId,
             title: req.body.title,
-            desc: req.body.desc,
             price: req.body.price,
-            image: req.body.image,
-            qty: req.body.qty
+            image: req.body.image
         }, {
             where: {
                 id: req.params.id

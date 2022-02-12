@@ -1,5 +1,5 @@
 // import required models
-const { User, Profile, Product } = require('../../models');
+const { User, Profile } = require('../../models');
 
 // get users
 exports.getUsers = (req, res) => {
@@ -10,11 +10,6 @@ exports.getUsers = (req, res) => {
                     model: Profile,
                     as: 'profile',
                     attributes: ['phone', 'gender', 'address']
-                },
-                {
-                    model: Product,
-                    as: 'products',
-                    attributes: ['title', 'desc', 'price', 'image', 'qty']
                 }
             ],
             attributes: ['id', 'fullName', 'email', 'password', 'image']
@@ -41,11 +36,6 @@ exports.getUserById = (req, res) => {
                     model: Profile,
                     as: 'profile',
                     attributes: ['phone', 'gender', 'address']
-                },
-                {
-                    model: Product,
-                    as: 'products',
-                    attributes: ['title', 'desc', 'price', 'image', 'qty']
                 }
             ],
             attributes: ['id', 'fullName', 'email', 'password', 'image']

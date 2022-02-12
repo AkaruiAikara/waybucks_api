@@ -14,11 +14,7 @@ module.exports = (sequelize, DataTypes) => {
       User.hasOne(models.Profile, {
         foreignKey: 'userId',
         as: 'profile'
-        })
-      User.hasMany(models.Product, {
-        foreignKey: 'userId',
-        as: 'products'
-      })
+        });
     }
   }
   User.init({

@@ -19,12 +19,11 @@ module.exports = {
     for (let i = 0; i < 200; i++) {
       // create product
       await queryInterface.bulkInsert('products', [{
-        userId: Math.floor(Math.random() * 100) + 1,
         title: faker.commerce.productName(),
-        desc: faker.lorem.paragraph(),
-        price: Math.floor(Math.random() * 100000),
+        price: Math.floor(Math.random() * 200000),
         image: faker.image.image(),
-        qty: Math.floor(Math.random() * 100)
+        createdAt: new Date(),
+        updatedAt: new Date()
       }], {});
     }
   },

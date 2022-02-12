@@ -15,7 +15,6 @@ module.exports = {
     for (let i = 0; i < 500; i++) {
       // create transaction
       await queryInterface.bulkInsert('transactions', [{
-        productId: Math.floor(Math.random() * 200) + 1,
         userId: Math.floor(Math.random() * 100) + 1,
         status: ['Pending', 'Success', 'Failed'][Math.floor(Math.random() * 3)],
         createdAt: new Date(),
