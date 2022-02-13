@@ -18,6 +18,8 @@ app.use(express.json());
 app.use(cors());
 // use routes
 app.use('/api/v1', router);
+// use uploads directory to serve static files
+app.use('/uploads', express.static('uploads'));
 // testing database connection
 db.authenticate()
 // listen to port

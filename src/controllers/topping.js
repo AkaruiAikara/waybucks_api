@@ -6,6 +6,13 @@ exports.getToppings = (req, res) => {
         Topping.findAll({
             attributes: ['id', 'title', 'price', 'image']
         }).then(toppings => {
+            toppings = JSON.parse(JSON.stringify(toppings))
+            toppings = toppings.map(topping => {
+                return {
+                    ...topping,
+                    image: process.env.FILE_PATH + topping.image
+                }
+            })
             res.send({
                 status: 'success',
                 data: {toppings}
@@ -32,9 +39,10 @@ exports.getToppingById = (req, res) => {
                 });
                 return;
             }
+            topping: JSON.parse(JSON.stringify(topping));
             res.send({
                 status: 'success',
-                data: {topping}
+                data: {...topping, image: process.env.FILE_PATH + topping.image}
             });
         });
     } catch (error) {
@@ -51,7 +59,7 @@ exports.addTopping = (req, res) => {
         Topping.create({
             title: req.body.title,
             price: req.body.price,
-            image: req.body.image
+            image: req.file.filename
         }).then(topping => {
             res.send({
                 status: 'success',
@@ -59,6 +67,11 @@ exports.addTopping = (req, res) => {
             });
         });
     } catch (error) {
+        if (error instanceof TypeError)
+            return res.status(400).send({
+                status: 'error',
+                message: 'Please select a file to upload!'
+            });
         res.status(500).send({
             status: 'error',
             message: error.message
@@ -69,10 +82,16 @@ exports.addTopping = (req, res) => {
 // update topping
 exports.updateTopping = (req, res) => {
     try {
+        let filename = null
+        try {
+            filename = req.file.filename
+        } catch (e) {
+            filename = req.body.image
+        }
         Topping.update({
             title: req.body.title,
             price: req.body.price,
-            image: req.body.image
+            image: filename
         }, {
             where: {
                 id: req.params.id

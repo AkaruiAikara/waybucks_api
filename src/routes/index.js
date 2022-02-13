@@ -4,6 +4,7 @@ const router = express.Router()
 
 // Middleware
 const { auth } = require('../middlewares/auth')
+const { uploadFile } = require('../middlewares/uploadFile')
 
 // Controllers
 
@@ -24,13 +25,13 @@ const { login, register } = require('../controllers/auth')
 router.get('/users', getUsers)
 router.get('/users/:id', getUserById)
 router.post('/users', addUser)
-router.patch('/users/:id', updateUser)
+router.patch('/users/:id', uploadFile('image'), updateUser)
 router.delete('/users/:id', deleteUser)
 // product
 router.get('/products', getProducts)
 router.get('/products/:id', getProductById)
-router.post('/products', addProduct)
-router.patch('/products/:id', updateProduct)
+router.post('/products', uploadFile('image'), addProduct)
+router.patch('/products/:id', uploadFile('image'), updateProduct)
 router.delete('/products/:id', deleteProduct)
 // transaction
 router.get('/transactions', auth, getTransactions)
@@ -42,8 +43,8 @@ router.delete('/transactions/:id', auth, deleteTransaction)
 // topping
 router.get('/toppings', getToppings)
 router.get('/toppings/:id', getToppingById)
-router.post('/toppings', addTopping)
-router.patch('/toppings/:id', updateTopping)
+router.post('/toppings', uploadFile('image'), addTopping)
+router.patch('/toppings/:id', uploadFile('image'), updateTopping)
 router.delete('/toppings/:id', deleteTopping)
 // auth
 router.post('/login', login)

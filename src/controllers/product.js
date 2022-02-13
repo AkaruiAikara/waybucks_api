@@ -7,16 +7,23 @@ exports.getProducts = (req, res) => {
         Product.findAll({
             attributes: ['id', 'title', 'price', 'image']
         }).then(products => {
+            products = JSON.parse(JSON.stringify(products))
+            products = products.map(product => {
+                return {
+                    ...product,
+                    image: process.env.FILE_PATH + product.image
+                }
+            })
             res.send({
                 status: 'success',
                 data: {products}
-            });
+            })
         });
     } catch (error) {
         res.status(500).send({
             status: 'error',
             message: error.message
-        });
+        })
     }
 };
 
@@ -33,9 +40,10 @@ exports.getProductById = (req, res) => {
                 });
                 return;
             }
+            product = JSON.parse(JSON.stringify(product));
             res.send({
                 status: 'success',
-                data: {product}
+                data: {...product, image: process.env.FILE_PATH + product.image}
             });
         });
     } catch (error) {
@@ -52,7 +60,7 @@ exports.addProduct = (req, res) => {
         Product.create({
             title: req.body.title,
             price: req.body.price,
-            image: req.body.image
+            image: req.file.filename
         }).then(product => {
             res.send({
                 status: 'success',
@@ -60,6 +68,11 @@ exports.addProduct = (req, res) => {
             });
         });
     } catch (error) {
+        if (error instanceof TypeError)
+            return res.status(400).send({
+                status: 'error',
+                message: 'Please select a file to upload!'
+            });
         res.status(500).send({
             status: 'error',
             message: error.message
@@ -70,10 +83,16 @@ exports.addProduct = (req, res) => {
 // update product
 exports.updateProduct = (req, res) => {
     try {
+        let filename = null
+        try {
+            filename = req.file.filename
+        } catch (e) {
+            filename = req.body.image
+        }
         Product.update({
             title: req.body.title,
             price: req.body.price,
-            image: req.body.image
+            image: filename
         }, {
             where: {
                 id: req.params.id

@@ -1,5 +1,12 @@
 // import required models
 const { User, Profile, Order, Transaction, Product } = require('../../models');
+// import joi
+const Joi = require('joi');
+// import bcrypt
+const bcrypt = require('bcrypt');
+const user = require('../../models/user');
+// generate salt
+const salt = bcrypt.genSaltSync(10);
 
 // get users
 exports.getUsers = (req, res) => {
@@ -27,8 +34,18 @@ exports.getUsers = (req, res) => {
                     }]
                 }
             ],
-            attributes: ['id', 'fullName', 'email', 'password', 'image']
+            attributes: ['id', 'fullName', 'email', 'image']
         }).then(users => {
+            users = JSON.parse(JSON.stringify(users))
+            users = users.map(user => {
+                if (user.image) {
+                    return {
+                        ...user,
+                        image: process.env.FILE_PATH + user.image
+                    }
+                }
+                return user
+            })
             res.send({
                 status: 'success',
                 data: {users}
@@ -68,7 +85,7 @@ exports.getUserById = (req, res) => {
                     }]
                 }
             ],
-            attributes: ['id', 'fullName', 'email', 'password', 'image']
+            attributes: ['id', 'fullName', 'email', 'image']
         }).then(user => {
             if (!user) {
                 res.status(404).send({
@@ -76,6 +93,12 @@ exports.getUserById = (req, res) => {
                     message: 'User not found'
                 });
                 return;
+            }
+            user = JSON.parse(JSON.stringify(user))
+            if (user.image) {
+                user.image = process.env.FILE_PATH + user.image
+            } else {
+                user.image = null
             }
             res.send({
                 status: 'success',
@@ -93,10 +116,26 @@ exports.getUserById = (req, res) => {
 // add user
 exports.addUser = (req, res) => {
     try {
+        // validate request
+        const schema = Joi.object().keys({
+            fullName: Joi.string().min(4).required(),
+            email: Joi.string().email().min(6).required(),
+            password: Joi.string().min(8).required(),
+        });
+        const { error } = schema.validate(req.body);
+        if (error && error.details) {
+            res.status(400).send({
+                status: 'error',
+                message: error.details[0].message
+            });
+            return;
+        }
+        // hash password
+        const hashedPassword = bcrypt.hashSync(req.body.password, salt);
         User.create({
             fullName: req.body.fullName,
             email: req.body.email,
-            password: req.body.password
+            password: hashedPassword
         }).then(user => {
             res.send({
                 status: 'success',
@@ -114,10 +153,22 @@ exports.addUser = (req, res) => {
 // update user
 exports.updateUser = (req, res) => {
     try {
+        // hash password
+        if (req.body.password) {
+            const hashedPassword = bcrypt.hashSync(req.body.password, salt)
+            req.body.password = hashedPassword
+        }
+        let filename = null
+        try {
+            filename = req.file.filename
+        } catch (e) {
+            filename = req.body.image
+        }
         User.update({
             fullName: req.body.fullName,
             email: req.body.email,
-            password: req.body.password
+            password: req.body.password,
+            image: filename
         }, {
             where: {
                 id: req.params.id
