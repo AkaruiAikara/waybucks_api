@@ -99,7 +99,9 @@ exports.updateTopping = (req, res) => {
         }).then(topping => {
             res.send({
                 status: 'success',
-                data: {topping}
+                data: {
+                    id: req.params.id
+                }
             });
         });
     } catch (error) {
@@ -127,7 +129,9 @@ exports.deleteTopping = (req, res) => {
             }
             res.send({
                 status: 'success',
-                data: {topping}
+                data: {
+                    id: req.params.id
+                }
             });
         });
     } catch (error) {

@@ -176,7 +176,9 @@ exports.updateUser = (req, res) => {
         }).then(user => {
             res.send({
                 status: 'success',
-                data: {user}
+                data: {
+                    id: req.params.id
+                }
             });
         });
     } catch (error) {

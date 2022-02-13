@@ -107,7 +107,9 @@ exports.updateProduct = (req, res) => {
             }
             res.send({
                 status: 'success',
-                data: {product}
+                data: {
+                    id: req.params.id
+                }
             });
         });
     } catch (error) {

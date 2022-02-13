@@ -171,7 +171,9 @@ exports.updateTransaction = (req, res) => {
         }).then(transaction => {
             res.send({
                 status: 'success',
-                data: { transaction }
+                data: {
+                    id: req.params.id
+                }
             });
         });
     } catch (error) {
@@ -192,7 +194,9 @@ exports.deleteTransaction = (req, res) => {
         }).then(transaction => {
             res.send({
                 status: 'success',
-                data: { transaction }
+                data: {
+                    id: req.params.id
+                }
             });
         });
     } catch (error) {
