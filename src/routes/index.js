@@ -16,6 +16,10 @@ const { getProducts, getProductById, addProduct, updateProduct, deleteProduct } 
 const { getTransactions, getTransactionsByUserId, getTransactionById, addTransaction, updateTransaction, deleteTransaction } = require('../controllers/transaction')
 // topping
 const { getToppings, getToppingById, addTopping, updateTopping, deleteTopping } = require('../controllers/topping')
+// order
+const { getOrders, getOrderById, getOrdersByTransactionId, getOrdersByUserId, addOrder, updateOrder, deleteOrder } = require('../controllers/order')
+// order topping pivot
+const { addOrderTopping, deleteOrderTopping } = require('../controllers/orderTopping')
 // auth
 const { login, register } = require('../controllers/auth')
 
@@ -46,6 +50,17 @@ router.get('/toppings/:id', getToppingById)
 router.post('/toppings', uploadFile('image'), addTopping)
 router.patch('/toppings/:id', uploadFile('image'), updateTopping)
 router.delete('/toppings/:id', deleteTopping)
+// order
+router.get('/orders', getOrders)
+router.get('/orders/:id', getOrderById)
+router.get('/orders/transaction/:transactionId', getOrdersByTransactionId)
+router.get('/orders/user/:userId', getOrdersByUserId)
+router.post('/orders', addOrder)
+router.patch('/orders/:id', updateOrder)
+router.delete('/orders/:id', deleteOrder)
+// order topping pivot
+router.post('/order-toppings', addOrderTopping)
+router.delete('/order-toppings/', deleteOrderTopping)
 // auth
 router.post('/login', login)
 router.post('/register', register)
